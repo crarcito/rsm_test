@@ -3,6 +3,7 @@
 - conda activate rsm_test
 - conda install -c conda-forge poetry
 - conda env export --from-history > environment.yml
+- conda install langchain -c conda-forge
 
 ### Create environment from file
 - conda env create -f environment.yml

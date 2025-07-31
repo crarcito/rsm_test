@@ -8,9 +8,22 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "langgraph (>=0.6.1,<0.7.0)",
+    "langchain-openai (>=0.3.28,<0.4.0)",
+    "python-dotenv (>=1.1.1,<2.0.0)",
+    "langgraph-cli[inmem] (>=0.3.6,<0.4.0)",
+    "fastapi[standard] (>=0.116.1,<0.117.0)",
+    "langchain-community (>=0.3.27,<0.4.0)",
+    "beautifulsoup4 (>=4.13.4,<5.0.0)",
+    "faiss-cpu (>=1.11.0.post1,<2.0.0)",
+    "python-decouple (>=3.8,<4.0)"
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.extras.dependencies]
+redis = "^6.2.0"
+
