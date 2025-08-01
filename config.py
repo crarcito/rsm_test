@@ -9,6 +9,13 @@ class Config:
     REDIS_USERNAME = config('REDIS_USERNAME')
     REDIS_PASSWORD = config('REDIS_PASSWORD')
 
+    LANGFUSE_SECRET_KEY = config('LANGFUSE_SECRET_KEY') 
+    LANGFUSE_PUBLIC_KEY = config('LANGFUSE_PUBLIC_KEY')
+    LANGFUSE_HOST = config('LANGFUSE_HOST')
+    
+    URL_1 = config('URL_1')
+    URL_2 = config('URL_2')
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -19,6 +26,14 @@ class DevelopmentConfig(Config):
     REDIS_USERNAME = config('REDIS_USERNAME')
     REDIS_PASSWORD = config('REDIS_PASSWORD')
 
+    LANGFUSE_SECRET_KEY = config('LANGFUSE_SECRET_KEY') 
+    LANGFUSE_PUBLIC_KEY = config('LANGFUSE_PUBLIC_KEY')
+    LANGFUSE_HOST = config('LANGFUSE_HOST')
+
+    URL_1 = config('URL_1')
+    URL_2 = config('URL_2')
+
+
 class ProductionConfig(Config):
     DEBUG = False
     SECRET_KEY = "nada",
@@ -27,6 +42,13 @@ class ProductionConfig(Config):
     REDIS_PORT = config('REDIS_PORT')
     REDIS_USERNAME = config('REDIS_USERNAME')
     REDIS_PASSWORD = config('REDIS_PASSWORD')
+
+    LANGFUSE_SECRET_KEY = config('LANGFUSE_SECRET_KEY') 
+    LANGFUSE_PUBLIC_KEY = config('LANGFUSE_PUBLIC_KEY')
+    LANGFUSE_HOST = config('LANGFUSE_HOST')
+
+    URL_1 = config('URL_1')
+    URL_2 = config('URL_2')
 
 config = {
     'development': DevelopmentConfig,

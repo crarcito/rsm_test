@@ -8,6 +8,7 @@ class Config:
     REDIS_PORT = config('REDIS_PORT')
     REDIS_USERNAME = config('REDIS_USERNAME')
     REDIS_PASSWORD = config('REDIS_PASSWORD')
+    EMBEDDING_MODEL = config('EMBEDDING_MODEL', default='text-embedding-ada-002')
 
 
 class DevelopmentConfig(Config):
@@ -18,6 +19,7 @@ class DevelopmentConfig(Config):
     REDIS_PORT = config('REDIS_PORT')
     REDIS_USERNAME = config('REDIS_USERNAME')
     REDIS_PASSWORD = config('REDIS_PASSWORD')
+    EMBEDDING_MODEL = config('EMBEDDING_MODEL', default='text-embedding-ada-002')
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -27,6 +29,7 @@ class ProductionConfig(Config):
     REDIS_PORT = config('REDIS_PORT')
     REDIS_USERNAME = config('REDIS_USERNAME')
     REDIS_PASSWORD = config('REDIS_PASSWORD')
+    EMBEDDING_MODEL = config('EMBEDDING_MODEL', default='text-embedding-ada-002')
 
 config = {
     'development': DevelopmentConfig,
