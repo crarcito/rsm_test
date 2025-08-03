@@ -1,0 +1,9 @@
+services:
+  web:
+    container_name: test_rsm
+    image: test_rsm_api:v1
+    restart: unless-stopped
+    ports:
+      - 7103:7103
+    env_file: .env
+networks: {}
