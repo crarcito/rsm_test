@@ -19,6 +19,10 @@ class Config:
     
     LANGCHAIN_API_KEY = config('LANGCHAIN_API_KEY') 
 
+    CHROMA_PATH = config('CHROMA_PATH') 
+    CHROMA_DB = config('CHROMA_DB') 
+    CHROMA_COLLECTION = config('CHROMA_COLLECTION') 
+
     PGSQL_HOST = config('PGSQL_HOST') 
     PGSQL_PORT = config('PGSQL_PORT') 
     PGSQL_USER = config('PGSQL_USER') 
@@ -49,6 +53,10 @@ class DevelopmentConfig(Config):
     
     LANGCHAIN_API_KEY = config('LANGCHAIN_API_KEY') 
 
+    CHROMA_PATH = config('CHROMA_PATH') 
+    CHROMA_DB = config('CHROMA_DB') 
+    CHROMA_COLLECTION = config('CHROMA_COLLECTION') 
+
     PGSQL_HOST = config('PGSQL_HOST') 
     PGSQL_PORT = config('PGSQL_PORT') 
     PGSQL_USER = config('PGSQL_USER') 
@@ -78,6 +86,11 @@ class ProductionConfig(Config):
     MODEL_SUPER = config('MODEL_SUPER')
     
     LANGCHAIN_API_KEY = config('LANGCHAIN_API_KEY') 
+
+    CHROMA_PATH = config('CHROMA_PATH') 
+    CHROMA_DB = config('CHROMA_DB') 
+    CHROMA_COLLECTION = config('CHROMA_COLLECTION')     
+    
 
     PGSQL_HOST = config('PGSQL_HOST') 
     PGSQL_PORT = config('PGSQL_PORT') 
