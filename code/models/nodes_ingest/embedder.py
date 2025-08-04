@@ -5,15 +5,14 @@ from config import config
 from typing import List
 import numpy as np
 
-settings = config['development']
+config_env = config['default']
 
 def embed_node(state):
     content = state["content"]
-    #     embeddings = OpenAIEmbeddings(model="gpt-4o-mini", api_key=OPENAI_API_KEY)
-    #     # db = FAISS.from_documents(chunks, embeddings)
-    #     # # db.save_local("vector_index")
 
-    embedder = OpenAIEmbeddings(model=settings.EMBEDDING_MODEL or "text-embedding-ada-002", api_key=settings.OPENAI_API_KEY)
+    # dimensions=1536   384
+    embedder = OpenAIEmbeddings(model=config_env.EMBEDDING_MODEL,  
+                                api_key=config_env.OPENAI_API_KEY)
     state["embedding"] = embedder.embed_query(content)
 
     # # response = openai.Embedding.create(model="text-embedding-ada-002", input=content)

@@ -1,6 +1,4 @@
 from decouple import config
-
-
 class Config:
     SECRET_KEY_APP = config('SECRET_KEY_APP'),
     SECRET_APP = config('SECRET_APP'),
@@ -18,6 +16,11 @@ class Config:
     MODEL_SUPER = config('MODEL_SUPER')
     
     LANGCHAIN_API_KEY = config('LANGCHAIN_API_KEY') 
+
+    LANGSMITH_TRACING= config('LANGSMITH_TRACING') 
+    LANGSMITH_ENDPOINT= config('LANGSMITH_ENDPOINT') 
+    LANGSMITH_API_KEY=config('LANGSMITH_API_KEY')
+    LANGSMITH_PROJECT= config('LANGSMITH_PROJECT') 
 
     CHROMA_PATH = config('CHROMA_PATH') 
     CHROMA_DB = config('CHROMA_DB') 
@@ -53,6 +56,11 @@ class DevelopmentConfig(Config):
     
     LANGCHAIN_API_KEY = config('LANGCHAIN_API_KEY') 
 
+    LANGSMITH_TRACING= config('LANGSMITH_TRACING') 
+    LANGSMITH_ENDPOINT= config('LANGSMITH_ENDPOINT') 
+    LANGSMITH_API_KEY=config('LANGSMITH_API_KEY')
+    LANGSMITH_PROJECT= config('LANGSMITH_PROJECT')     
+
     CHROMA_PATH = config('CHROMA_PATH') 
     CHROMA_DB = config('CHROMA_DB') 
     CHROMA_COLLECTION = config('CHROMA_COLLECTION') 
@@ -87,6 +95,11 @@ class ProductionConfig(Config):
     
     LANGCHAIN_API_KEY = config('LANGCHAIN_API_KEY') 
 
+    LANGSMITH_TRACING= config('LANGSMITH_TRACING') 
+    LANGSMITH_ENDPOINT= config('LANGSMITH_ENDPOINT') 
+    LANGSMITH_API_KEY=config('LANGSMITH_API_KEY')
+    LANGSMITH_PROJECT= config('LANGSMITH_PROJECT') 
+    
     CHROMA_PATH = config('CHROMA_PATH') 
     CHROMA_DB = config('CHROMA_DB') 
     CHROMA_COLLECTION = config('CHROMA_COLLECTION')     

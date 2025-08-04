@@ -1,8 +1,13 @@
 from fastapi import APIRouter
 
-# from ..schemas import QueryRequest
+# # from ..schemas import QueryRequest
 from models.query import Query
 from models.ingest import Ingestion
+
+from agents.query_graph import rsm_graph
+
+from config import config
+config_env = config['default']
 
 
 api_router = APIRouter()
@@ -18,21 +23,31 @@ async def ingest():
     return {"status": results}
     # return {"message": "ingested successfully"}
 
+
 # @api_router.post("/query" , response_model=QueryResponse)
+
 @api_router.post("/query")
-async def query(req: str):
-    # results = Query.get_question_answer(namecollection="test_collection", question=req.query, matching_count=req.top_k)
+async def query(question: str):
 
-    results = Query.get_question_answer(question=req, matching_count=2)
+    # return prueba.invoke({"customer_name": question})
 
-    # return {"results": results}return "shao"
-    # return {"results": results}
+    # return prueba.invoke({"query": question})
 
-    return {
-            "answer": results,
-            "sources": [
-                    { "page": 1, "text": "<passage text>" },
-                    ]
-            }
+    #     state = {"my_var": "", "customer_name": "", "query": ""}
 
+    state_graph = rsm_graph.invoke(
+        {
+            "query": question,
+            "token": config_env.SECRET_KEY_APP,      
+            "embedding": [],
+            "documents": [""],
+            "answer": ""
+        }
+    )
+    return state_graph
+        
+# "embedding": [],
+
+    # results = Query.get_question_answer(question=question, matching_count=2)
     # return results
+

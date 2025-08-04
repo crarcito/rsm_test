@@ -1,0 +1,9 @@
+{
+    "dependencies": ["."],
+    "graphs": {
+        "name": "code/agents/query_graph.py:rsm_graph"
+    },
+    "python_version": "3.11.7"
+} 
+
+

@@ -1,6 +1,6 @@
-import chromadb
+from models.nodes_query import queries
+from database.db import get_connection, get_collection
 
-from database.db import get_connection
 from config import config
 
 config_env = config['default']
@@ -10,16 +10,20 @@ class Query():
     @classmethod
     def get_question_answer(self, question, matching_count):
         try:
-            collection = get_connection()
-            # collection = conecction.get_collection(name="test_collection")
+            if not question:
+                raise ValueError("No question provided")
+    
+            connection  = get_connection()
+            collections = get_collection(connection)
 
-            # results = collection.query(
-            #         query_texts=[question],
-            #         n_results=matching_count
-            #     )
-            results = "nose"
+            state = {"query": question}
+
+
+            results = queries.query_node(question, collections, matching_count)
+
+            # results = "nose"
             return results
-        except Exception as ex:
+        except ValueError as ex:
             return ex
 
         
