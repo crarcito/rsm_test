@@ -3,7 +3,7 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY code /app/code
+COPY code /app
 
 # RUN apk add --no-cache gcc musl-dev linux-headers
 
@@ -12,7 +12,7 @@ COPY .env  .env
 
 COPY requirements.txt  requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 
 RUN pip3 install transformers --no-deps \
@@ -21,4 +21,9 @@ RUN pip3 install transformers --no-deps \
 
 RUN python -c "from sentence_transformers import SentenceTransformer; model = SentenceTransformer('sdadas/mmlw-retrieval-roberta-large')"
 
-CMD ["python", "code/app.py"]
+#EXPOSE the port where app will be running
+EXPOSE 8080
+
+#Command to run the app
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+

@@ -1,0 +1,82 @@
+from typing import List, TypedDict
+from langfuse._client.observe import observe
+from langfuse._client.get_client import get_client
+from langfuse._client.client import Langfuse, _AgnosticContextManager
+
+from langchain.callbacks import  LangChainTracer
+
+
+from config import config
+config_env = config['default']
+
+
+langfuse = Langfuse(
+    public_key=config_env.LANGFUSE_PUBLIC_KEY,
+    secret_key=config_env.LANGFUSE_SECRET_KEY,
+    host=config_env.LANGFUSE_HOST,
+)
+
+def start_trace(user_id: str, name: str, input_text: str, seed: str, output_text: dict):
+
+    trace_id = langfuse.create_trace_id(seed=seed)
+
+    trace = langfuse.start_as_current_span(
+        name="query_trace",
+        input=input_text
+    )
+
+    # Generate a deterministic ID based on a seed
+    # Use the ID with trace context
+    with langfuse.start_as_current_span(
+        name=name,
+        trace_context={"trace_id": trace_id}, input=input_text, output=output_text
+    ) as span:
+        # Operation will be part of the specific trace
+        pass
+
+    return trace
+
+def log_span(trace, name: str, input_data: dict, output_data: dict):
+
+    trace.span(
+        name=name,
+        input=input_data,
+        output=output_data,
+    )
+
+def log_error(trace, error_message: str):
+    trace.span(
+        name="error",
+        input={},
+        output={"error": error_message},
+    )
+
+
+def CrearArchivoLog():
+    import logging
+    import os
+
+    # Define la ruta del archivo de registro
+    log_dir = os.path.join(os.getcwd(), 'logs')  # Crea un directorio 'logs' en el directorio actual
+    log_file = os.path.join(log_dir, 'test_rsm.log')
+
+    # Crea el directorio si no existe
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    # Configura el manejador de archivos
+    handler = logging.FileHandler(log_file)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+
+    # Añade el manejador al logger
+    logger = logging.getLogger('test_rsm')
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+
+    # Ahora puedes usar el logger para registrar mensajes
+    logger.debug('Este es un mensaje de depuración')
+    logger.info('Este es un mensaje informativo')
+    logger.warning('Este es un mensaje de advertencia')
+    logger.error('Este es un mensaje de error')
+    logger.critical('Este es un mensaje crítico')

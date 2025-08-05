@@ -49,8 +49,8 @@ Design and implement a Python-based Retrieval-Augmented Generation (RAG) microse
 
 ### 3. LLM Integration with langrapgh/langchain
 
-- Use a configurable LLM for answer synthesis (e.g. OpenAI API).  
-- Store configuration (API keys, endpoints) in environment variables.
+-OK - Use a configurable LLM for answer synthesis (e.g. OpenAI API).  
+-OK - Store configuration (API keys, endpoints) in environment variables.
 
 ### 4. Langufuse, Langsmith, etc. Observability
 
@@ -58,7 +58,7 @@ Design and implement a Python-based Retrieval-Augmented Generation (RAG) microse
   - Document ingestion and chunking  
   - Embedding computation  
   - Similarity search  
-  - LLM inference calls  
+  -OK - LLM inference calls  
 - Emit structured logs for incoming requests, errors, and significant events.  
 - Record and expose metrics (e.g. request counts, latency histograms, error rates).
 

@@ -1,4 +1,6 @@
 from config import config
+from utils.observability import start_trace, log_span, log_error, CrearArchivoLog
+from datetime import datetime
 
 from models.nodes_ingest import scraper, chunker, embedder, store_chroma
 
@@ -12,9 +14,11 @@ config_env = config['default']
 from chromadb import Collection
 
 class Ingestion():    
-    @classmethod    
+    @classmethod
     def add_ingest_urls(self):
     # try:
+        CrearArchivoLog()
+
         urls = [config_env.URL_1, config_env.URL_2]
 
         # urls = ["https://www.google.com/"]
@@ -28,8 +32,13 @@ class Ingestion():
         for i, url in enumerate(urls):
             state = {"url": url, "key": f"doc:{i}"}
 
+            trace = start_trace(user_id="crar", name="start scrape_node documento", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
             scraper.scrape_node(state)
+            trace = start_trace(user_id="crar", name="end scrape_node documento", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
+
+            trace = start_trace(user_id="crar", name="start chunker_text", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
             chunker.chunk_text(state)
+            trace = start_trace(user_id="crar", name="end chunker_text", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
 
             for chunk in state["chunks"]:
                 chunk_state = {"content": chunk, "key": f"doc:{i}:{hash(chunk)}"}

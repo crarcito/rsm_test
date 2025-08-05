@@ -1,7 +1,6 @@
 from typing import List, TypedDict
-
-
 from langgraph.graph import StateGraph, START, END
+
 
 from models.agents.nodes.node_embedding import embedding_query_node
 
@@ -10,6 +9,9 @@ from models.agents.nodes.node_rerank import rerank_query_node
 from models.agents.nodes.node_generate_answer import generate_answer_query_node
 from models.agents.nodes.node_output import output_query_node
 
+from utils.observability import start_trace, log_span, log_error
+
+import utils.time as tiempo, logging as logger
 
 # lf = Langfuse(public_key="...", secret_key="...")
 
@@ -37,7 +39,10 @@ class RAGState(TypedDict):
 BEGIN = True
 if BEGIN:
     # Auth Node
+    @tiempo.time_execution
     def auth_node(state: RAGState) -> RAGState:
+        logger.info(f"start auth_node sin decorador")
+
         # Verifica JWT y extrae user_id
         state["token"] = "Token OK"
         # state["user_id"] = verify_token(state["token"])
@@ -74,7 +79,7 @@ if BEGIN:
 
         return state
     
-    
+
     def output_node(state: RAGState):
 
         state["answer_final"] = output_query_node(state["response_RAG"], state["reranked_docs"])

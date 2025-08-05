@@ -1,14 +1,31 @@
+from langchain_community.document_loaders import WebBaseLoader
 import requests
+from datetime import datetime
 from bs4 import BeautifulSoup
 
+from utils.observability import start_trace, log_span, log_error
+
+import utils.time as tiempo, logging as logger
+
+@tiempo.time_execution
 def scrape_node(state):
     """ This function fetches the HTML content of the given URL and extracts text from it.
     It updates the state with the scraped text."""
-
     #     loader = WebBaseLoader(urls)
     #     docs = loader.load()
-
+    
     # Ensure the state has a URL to scrape
+    urls = state["url"]
+
+    # logger.info(time_execution)
+    # try:
+    #     docs = [WebBaseLoader(url).load() for url in urls]
+    #     doc_list = [item for sublist in docs for item in sublist]
+
+
+    #     state["text"] = doc_list
+    # except ValueError as ex:
+    #     raise ex  
 
     try:
         url = state["url"]

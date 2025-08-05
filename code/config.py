@@ -1,4 +1,5 @@
 from decouple import config
+
 class Config:
     SECRET_KEY_APP = config('SECRET_KEY_APP'),
     SECRET_APP = config('SECRET_APP'),
