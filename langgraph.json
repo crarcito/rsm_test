@@ -1,9 +1,8 @@
 {
-    "dependencies": ["."],
+    "dependencies": [".", "code","code/models","code/models/agents","code/models/agents/nodes"],
     "graphs": {
-        "name": "code/agents/query_graph.py:rsm_graph"
+        "test_rsm": "code/models/agents/nodes/agent_query.py:query_graph"
     },
-    "python_version": "3.11.7"
+    "python_version": "3.11"
 } 
-
 

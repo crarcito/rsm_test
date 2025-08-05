@@ -4,7 +4,11 @@ from fastapi import APIRouter
 from models.query import Query
 from models.ingest import Ingestion
 
-from agents.query_graph import rsm_graph
+
+
+from models.agents.nodes.agent_query import query_graph
+
+
 
 from config import config
 config_env = config['default']
@@ -35,16 +39,28 @@ async def query(question: str):
 
     #     state = {"my_var": "", "customer_name": "", "query": ""}
 
-    state_graph = rsm_graph.invoke(
+    state_graph = query_graph.invoke(
         {
             "query": question,
-            "token": config_env.SECRET_KEY_APP,      
+            "token": config_env.SECRET_KEY_APP,
+
             "embedding": [],
             "documents": [""],
-            "answer": ""
+            "reranked_docs": [""],
+            
+            "response_RAG": "",
+
+            "prompt": "",
+            "answer_context": [""],
+
+            "answer_final": dict()
+
         }
     )
-    return state_graph
+    return state_graph["answer_final"]
+
+    # result = run_rag_flow(urls=[url1, url2], question=query)
+    # return {"answer": result["answer"]}
         
 # "embedding": [],
 

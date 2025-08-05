@@ -2,7 +2,7 @@ from openai import OpenAI
 
 # from langchain.prompts import PromptTemplate
 
-# # ✍️ Modo explicativo
+# # Modo explicativo
 # EXPLANATORY_PROMPT = PromptTemplate(
 #     input_variables=["context", "question"],
 #     template=(
@@ -13,7 +13,7 @@ from openai import OpenAI
 #     )
 # )
 
-# # 📌 Modo sintético (resumen ejecutivo)
+# #  Modo sintético (resumen ejecutivo)
 # SUMMARY_PROMPT = PromptTemplate(
 #     input_variables=["context", "question"],
 #     template=(
@@ -24,7 +24,7 @@ from openai import OpenAI
 #     )
 # )
 
-# # 🧐 Modo evaluativo
+# #  Modo evaluativo
 # CRITIQUE_PROMPT = PromptTemplate(
 #     input_variables=["context", "question"],
 #     template=(
