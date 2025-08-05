@@ -25,5 +25,6 @@ RUN python -c "from sentence_transformers import SentenceTransformer; model = Se
 EXPOSE 8080
 
 #Command to run the app
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["python", "app.py"]
 
