@@ -35,13 +35,13 @@ import logging
 
 @api_router.post("/query")
 async def query(question: str):
-    trace = start_trace(user_id="crar", name="start query", input_text=question, seed=str(datetime.now()), output_text=dict())
+    CrearArchivoLog()
+    logger = logging.getLogger("test_rsm")
+
+    datetime_now = str(datetime.now())
+    trace = start_trace(user_id="crar", name="Interacción con el agente", input_text=question, seed=datetime_now, output_text={"proc":"Inicio invocación"})
 
     try:
-        CrearArchivoLog()
-        logger = logging.getLogger('test_rsm')
-        logger.info(f'iniciando query - {question}')
-
         state_graph = query_graph.invoke(
             {
                 "query": question,
@@ -60,22 +60,13 @@ async def query(question: str):
             }
         )
 
-        logger.info(f'saliendo de query - {question}')
-
-        # log_span(trace, name="endpoint_query", input_data={"query": question}, output_data=state_graph["answer_final"])
-        trace = start_trace(user_id="crar", name="end query", input_text=question, seed=str(datetime.now()), output_text=state_graph["answer_final"])
+        trace = start_trace(user_id="crar", name="Interacción con el agente", input_text=question, seed=datetime_now, output_text={"proc":"Término invocación"})
 
         return state_graph["answer_final"]
         
     except Exception as e:
         # log_error(trace, str(e))
         logger.info(f'error en responder - {e.args}')
-        trace = start_trace(user_id="crar", name="Error LLM inference calls", input_text=question,  seed=str(datetime.now()), 
-                            output_text={
-                                        "answer": state_graph["answer_context"],
-                                        "error": e.args
-                                    }
-                            )
         return {
                     "answer": question,
                     "error": [{"page": 0, "text":  HTTPException(status_code=500, detail="Error en la consulta semántica")}]

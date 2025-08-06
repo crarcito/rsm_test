@@ -55,11 +55,11 @@ Design and implement a Python-based Retrieval-Augmented Generation (RAG) microse
 ### 4. Langufuse, Langsmith, etc. Observability
 
 - Instrument spans for these operations:  
-  - Document ingestion and chunking  
-  - Embedding computation  
+  -OK - Document ingestion and chunking  
+  -OK - Embedding computation  
   - Similarity search  
   -OK - LLM inference calls  
-- Emit structured logs for incoming requests, errors, and significant events.  
+-OK - Emit structured logs for incoming requests, errors, and significant events.  
 - Record and expose metrics (e.g. request counts, latency histograms, error rates).
 
 ---

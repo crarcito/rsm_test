@@ -9,11 +9,10 @@ from models.agents.nodes.node_rerank import rerank_query_node
 from models.agents.nodes.node_generate_answer import generate_answer_query_node
 from models.agents.nodes.node_output import output_query_node
 
-from utils.observability import start_trace, log_span, log_error
+from utils.observability import start_trace, log_span, log_error, CrearArchivoLog
+from datetime import datetime
+import logging
 
-import utils.time as tiempo, logging as logger
-
-# lf = Langfuse(public_key="...", secret_key="...")
 
 # Define state
 class RAGState(TypedDict):
@@ -38,37 +37,49 @@ class RAGState(TypedDict):
 # **********************************************************************************
 BEGIN = True
 if BEGIN:
-    # Auth Node
-    @tiempo.time_execution
+    datetime_now = str(datetime.now())
+    # Auth Node # Verifica JWT y extrae user_id
     def auth_node(state: RAGState) -> RAGState:
-        logger.info(f"start auth_node sin decorador")
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo verificación Token de acceso", seed=datetime_now, output_text={"proc":"token"})
 
-        # Verifica JWT y extrae user_id
         state["token"] = "Token OK"
         # state["user_id"] = verify_token(state["token"])
+
+        start_trace(user_id="crar", name="Interacción con el agente", input_text=state["token"], seed=datetime_now, output_text={"node": "auth_node", "proc":"token"})
         return state
 
     # Embedding Node
-    # @time_execution
     def embed_node(state: RAGState) -> RAGState:
-        # state["embedding"] = "embedding OK"
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Embedding Query ", seed=datetime_now, output_text={"node": "embed_node", "output": state["query"]})
+
         state["embedding"] = embedding_query_node(state["query"])
+
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Embedding Query terminado", seed=datetime_now, output_text={"node": "embed_node", "output": state["embedding"]})
         return state
 
     # Retrieval Node
     def retrieve_node(state: RAGState) -> RAGState:
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Retrieve Query ", seed=datetime_now, output_text={"node": "retrieve_node", "output": state["query"]})
+
         state["documents"] = retrieve_query_node(state["query"], state["embedding"])
+
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Retrieve Query terminado", seed=datetime_now, output_text={"node": "retrieve_node", "output": state["documents"]})
         return state
 
     
     # Rerank Node
     def rerank_node(state: RAGState) -> RAGState:
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Rerank Query ", seed=datetime_now, output_text={"node": "rerank_node", "output": state["query"]})
+
         state["reranked_docs"] = rerank_query_node(state["query"], state["documents"])
+
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Rerank Query ", seed=datetime_now, output_text={"node": "rerank_node", "output": state["reranked_docs"]})
         return state
 
-    # # @observe(name="document_ingestion")
     # Generation Node
     def generateRAG_node(state: RAGState) -> RAGState:
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo generateRAG Query ", seed=datetime_now, output_text={"node": "generateRAG_node", "output": state["query"]})
+
         result = generate_answer_query_node(state["query"], state["reranked_docs"], state)
 
         state["prompt"] = result["prompt"]
@@ -77,29 +88,18 @@ if BEGIN:
 
         state["response_RAG"] = result["answer_context"]
 
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo generateRAG Query ", seed=datetime_now, output_text={"node": "generateRAG_node", "output": state["response_RAG"]})
         return state
     
 
     def output_node(state: RAGState):
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Output Query ", seed=datetime_now, output_text={"node": "output_node", "output": state["query"]})
 
         state["answer_final"] = output_query_node(state["response_RAG"], state["reranked_docs"])
 
+        start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Output Query ", seed=datetime_now, output_text={"node": "output_node", "output": state["answer_final"]})
         return state
     
-        # sources = [{"page": c.get("page", 0), "text": c["text"]} for c in state["reranked_docs"]]
-        # return {
-        #     "answer": state["answer"]
-        # }
-        # state["answer"] = [{"page": 0, "text": c} for c in state["reranked_docs"]]
-        # # [{"page": 0, "text": c} for c in state["reranked_docs"]]
-        # # sources = [{"page": c.get("page", 0), "text": c["text"]} for c in state["reranked_docs"]]
-
-        # return state
-    
-        # return {
-        #     "answer": state["answer"],
-        #     "sources": sources
-        #     }
     # def response_node(state: RAGState):
     #     # sources = [{"page": c.get("page", 0), "text": c["text"]} for c in state["reranked_docs"]]
     #     return {
@@ -117,8 +117,6 @@ if BEGIN:
         texts = state.get("retrieved_texts", [])
         state["answer"] = "\n---\n".join(texts[:3])  # une top 3 en una respuesta coherente
         return state
-    # from langfuse.decorators import observe
-    # from langchain.callbacks.tracers.langchain import wait_for_all_tracers
 
     # @observe(name="document_ingestion")
     # # Generation Node
@@ -149,6 +147,7 @@ if BEGIN:
 # Initialize the state graph
 # **********************************************************************************
 if BEGIN:
+
     graph = StateGraph(RAGState)
 
     graph.add_node("auth", auth_node)
@@ -178,7 +177,6 @@ if BEGIN:
 
 
     # Compile the graph
-    # query_graph = graph.compile()
     query_graph = graph.compile()
 
 
@@ -187,16 +185,6 @@ if BEGIN:
 # **********************************************************************************
 
 
-# import logging
-# import time
-# def time_execution(fn):
-#     def wrapper(state):
-#         start = time.time()
-#         result = fn(state)
-#         elapsed = time.time() - start
-#         logger.info(f"[{fn.__name__}] Tiempo de ejecución: {elapsed:.2f}s")
-#         return result
-#     return wrapper
 
 # from fastapi.testclient import TestClient
 # from app import app
