@@ -5,6 +5,8 @@ from langfuse._client.client import Langfuse, _AgnosticContextManager
 
 from langchain.callbacks import  LangChainTracer
 
+import logging
+import os
 
 from config import config
 config_env = config['default']
@@ -53,9 +55,6 @@ def log_error(trace, error_message: str):
 
 
 def CrearArchivoLog():
-    import logging
-    import os
-
     # Define la ruta del archivo de registro
     log_dir = os.path.join(os.getcwd(), 'logs')  # Crea un directorio 'logs' en el directorio actual
     log_file = os.path.join(log_dir, 'test_rsm.log')

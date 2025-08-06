@@ -29,7 +29,7 @@ Design and implement a Python-based Retrieval-Augmented Generation (RAG) microse
 
 -OK - `GET /health` → returns 200 OK.  
 -OK - `POST /ingest` → triggers the ingestion:
--OK - `POST /query` → accepts:
+-OK - `POST /query` → accepts: 
 
   ```json
   { "question": "<text>" }

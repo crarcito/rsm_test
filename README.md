@@ -6,7 +6,7 @@ Proyecto de referencia para la integración de agentes, trazabilidad y recuperac
 
 ## Descripción
 
-Este proyecto implementa una arquitectura modular para agentes conversacionales y recuperación de información, con observabilidad avanzada mediante Langfuse y trazabilidad de flujos. Incluye integración con modelos de lenguaje, embeddings, y almacenamiento en ChomaDB Persistent.
+Este proyecto implementa una arquitectura modular para agentes conversacionales y recuperación de información, con observabilidad avanzada mediante Langfuse, trazabilidad de flujos y registro en log local(carpeta log). Incluye integración con modelos de lenguaje, embeddings, y almacenamiento en base de datos vectorial ChomaDB Persistent.
 
 ---
 
@@ -24,6 +24,7 @@ rsm_test/
 │       ├── nodes_ingest/
 │       └── nodes_query/
 │   └── ...
+├── logs/
 ├── requirements.txt
 ├── Dockerfile
 ├── .env

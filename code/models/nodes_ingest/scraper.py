@@ -7,7 +7,7 @@ from utils.observability import start_trace, log_span, log_error
 
 import utils.time as tiempo, logging as logger
 
-@tiempo.time_execution
+@tiempo.time_execution 
 def scrape_node(state):
     """ This function fetches the HTML content of the given URL and extracts text from it.
     It updates the state with the scraped text."""

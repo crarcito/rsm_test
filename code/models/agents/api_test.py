@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from utils.observability import start_trace, log_span, log_error, CrearArchivoLog
-
+from datetime import datetime
 # # from ..schemas import QueryRequest
 from models.query import Query
 from models.ingest import Ingestion
@@ -31,13 +31,17 @@ async def ingest():
 
 # @api_router.post("/query" , response_model=QueryResponse)
 
+import logging
 
 @api_router.post("/query")
 async def query(question: str):
-    trace = start_trace(user_id="crar", name="start LLM inference calls", input_text=question, seed="session-457", output_text=dict())
+    trace = start_trace(user_id="crar", name="start query", input_text=question, seed=str(datetime.now()), output_text=dict())
 
     try:
         CrearArchivoLog()
+        logger = logging.getLogger('test_rsm')
+        logger.info(f'iniciando query - {question}')
+
         state_graph = query_graph.invoke(
             {
                 "query": question,
@@ -55,20 +59,18 @@ async def query(question: str):
                 "answer_final": dict()
             }
         )
+
+        logger.info(f'saliendo de query - {question}')
+
         # log_span(trace, name="endpoint_query", input_data={"query": question}, output_data=state_graph["answer_final"])
-        trace = start_trace(user_id="crar", name="answer LLM inference calls", 
-                            input_text=state_graph["answer_context"], 
-                            seed="session-458", 
-                            output_text=state_graph["answer_final"])
+        trace = start_trace(user_id="crar", name="end query", input_text=question, seed=str(datetime.now()), output_text=state_graph["answer_final"])
 
         return state_graph["answer_final"]
         
     except Exception as e:
         # log_error(trace, str(e))
-        trace = start_trace(user_id="crar", 
-                            name="LLM inference calls - Error",
-                            input_text=str(e),  
-                            seed="session-459", 
+        logger.info(f'error en responder - {e.args}')
+        trace = start_trace(user_id="crar", name="Error LLM inference calls", input_text=question,  seed=str(datetime.now()), 
                             output_text={
                                         "answer": state_graph["answer_context"],
                                         "error": e.args

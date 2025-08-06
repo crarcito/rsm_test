@@ -1,6 +1,7 @@
 from config import config
 from utils.observability import start_trace, log_span, log_error, CrearArchivoLog
 from datetime import datetime
+import logging
 
 from models.nodes_ingest import scraper, chunker, embedder, store_chroma
 
@@ -19,51 +20,66 @@ class Ingestion():
     # try:
         CrearArchivoLog()
 
+        logger = logging.getLogger('test_rsm')
+
+        urls = [config_env.URL_1, config_env.URL_2]
+
+        datetime_now = str(datetime.now())
+
+        trace = start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text="Conectando al servidor", seed=datetime_now, output_text={"docs":urls})
+
         urls = [config_env.URL_1, config_env.URL_2]
 
         # urls = ["https://www.google.com/"]
 
         if not urls:
+            logger.error('No URLs provided for ingestion. (add_ingest_urls)')
             raise ValueError("No URLs provided for ingestion. (add_ingest_urls)")
 
-        connection  = get_connection()
-        collections = create_collection(connection)
+        try:
 
-        for i, url in enumerate(urls):
-            state = {"url": url, "key": f"doc:{i}"}
-
-            trace = start_trace(user_id="crar", name="start scrape_node documento", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
-            scraper.scrape_node(state)
-            trace = start_trace(user_id="crar", name="end scrape_node documento", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
-
-            trace = start_trace(user_id="crar", name="start chunker_text", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
-            chunker.chunk_text(state)
-            trace = start_trace(user_id="crar", name="end chunker_text", input_text=state["url"], seed=str(datetime.now()), output_text=dict())
-
-            for chunk in state["chunks"]:
-                chunk_state = {"content": chunk, "key": f"doc:{i}:{hash(chunk)}"}
-                embedding_chunk = embedder.embed_node(chunk_state)
-                # store_chroma.store_node(chunk_state, collections)
-
-                key = state["key"]
-
-                # Store the content and embedding in Chroma
-                collections.add(
-                    documents = chunk_state["content"],
-                    ids = state["key"]
-                )
-                # collection.add(
-                #     ids=["id1", "id2", "id3", ...],
-                #     embeddings=[[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2], ...],
-                #     documents=["doc1", "doc2", "doc3", ...],
-                #     metadatas=[{"chapter": 3, "verse": 16}, {"chapter": 3, "verse": 5}, {"chapter": 29, "verse": 11}, ...],
-                    
-                # )
+            logger.info(f"Iniciando creación de base de datos {config_env.CHROMA_DB}")
+            start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text="Conectando al servidor...", seed=datetime_now, output_text={"docs":urls})
+            connection  = get_connection()
+            start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text="Creando base de datos...", seed=datetime_now, output_text={"docs":urls})
 
 
-    # except ValueError as ex:
-    #     raise ex
+            start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text=f"Creando Collection {config_env.CHROMA_COLLECTION} ...", seed=datetime_now, output_text={"docs":urls})
+            collections = create_collection(connection)
+
+            start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text=f"Ingestion datos en Collection {config_env.CHROMA_COLLECTION} ...", seed=datetime_now, output_text={"docs":urls})
+
+            for i, url in enumerate(urls):
+                state = {"url": url, "key": f"doc:{i}"}
+
+                start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text=f"Iniciando scrapping a documento {url}...", seed=datetime_now, output_text=url)
+                scraper.scrape_node(state)
+
+                start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text=f"scrapping terminado -> Iniciando chunking ...", seed=datetime_now, output_text=url)
+                chunker.chunk_text(state)
+
+                start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text=f"chunking terminado -> Iniciando embedding ...", seed=datetime_now, output_text=url)
+
+                for chunk in state["chunks"]:
+                    chunk_state = {"content": chunk, "key": f"doc:{i}:{hash(chunk)}"}
+                    embedding_chunk = embedder.embed_node(chunk_state)
+                    # store_chroma.store_node(chunk_state, collections)
+
+                    key = state["key"]
+
+                    # Store the content and embedding in Chroma
+                    collections.add(
+                        documents = chunk_state["content"],
+                        ids = state["key"]
+                    )
+
+            start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text=f"Proceso creación de base de datos terminada", seed=datetime_now, output_text={"docs":urls})
+            logger.info(f"Creación de base de datos {config_env.CHROMA_DB} terminada con éxito")
+
+        except ValueError as ex:
+            logger.error(f"Error en la creación de base de datos {config_env.CHROMA_DB} - {ex.args}")
         
+
         return {
-                "status_ingest": "ingested",
+                "status_ingest": "ingested ok",
                 }
