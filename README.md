@@ -22,16 +22,16 @@ Su función es responder a las consultas de los usuarios sobre programación en 
 ## 🧠 Arquitectura General
 
 - graph TD
-    A[FastAPI App] 
-    A --> B[GET /health]
-    A --> B[POST /ingest]
-      B --> E[Carga de documentos + Chunker]
-      E --> F[Generador de Embedding]
-      F --> G[Ingesta de datos como Vector (e.g. CHROMADB)]
-    A --> C[POST /query]
-      C --> H[Retriever]
-      H --> I[LLM via LangChain]
-      I --> J[Langufuse Observability]
+- A[FastAPI App] 
+- A --> B[GET /health]
+- A --> B[POST /ingest]
+- B --> E[Carga de documentos + Chunker]
+- E --> F[Generador de Embedding]
+- F --> G[Ingesta de datos como Vector (e.g. CHROMADB)]
+- A --> C[POST /query]
+- C --> H[Retriever]
+- H --> I[LLM via LangChain]
+- I --> J[Langufuse Observability]
 
 ## 🛠 Tecnologías
 
@@ -53,17 +53,17 @@ Su función es responder a las consultas de los usuarios sobre programación en 
 - │   └── database/
 - │       └── db.py             # Conexión a base de datos
 - │   └── models/
-│       └── agents/
-│       └── nodes_ingest/
-│       └── nodes_query/
-│   └── utils/
-│   └── ...
-├── logs/
-├── requirements.txt
-├── Dockerfile
-├── .env
-├── langgraph.json
-└── main.py
+- │       └── agents/
+- │       └── nodes_ingest/
+- │       └── nodes_query/
+- │   └── utils/
+- │   └── ...
+- ├── logs/
+- ├── requirements.txt
+- ├── Dockerfile
+- ├── .env
+- ├── langgraph.json
+- └── main.py
 
 
 ## 📡 Endpoints REST
