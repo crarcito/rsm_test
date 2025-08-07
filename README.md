@@ -21,7 +21,7 @@ Su función es responder a las consultas de los usuarios sobre programación en 
 
 ## 🧠 Arquitectura General
 
-graph TD
+- graph TD
     A[FastAPI App] 
     A --> B[GET /health]
     A --> B[POST /ingest]
@@ -35,24 +35,24 @@ graph TD
 
 ## 🛠 Tecnologías
 
-LangGraph	  Orquestación modular de nodos RAG
-FastAPI     API web para interacción y visualización
-CHROMA      Almacenamiento y recuperación semántica de embeddings
-LangChain   Interfaz con LLMs y retrievers
-Langfuse    Trazabilidad por spans en cada etapa del grafo
-Prometheus  Métricas de latencia, errores y uso de LLM (a futuro)
+- LangGraph	  Orquestación modular de nodos RAG
+- FastAPI     API web para interacción y visualización
+- CHROMA      Almacenamiento y recuperación semántica de embeddings
+- LangChain   Interfaz con LLMs y retrievers
+- Langfuse    Trazabilidad por spans en cada etapa del grafo
+- Prometheus  Métricas de latencia, errores y uso de LLM (a futuro)
 
 
 
 ## 📦 Estructura del proyecto
 
-rsm_test/
-├── code/
-│   └── data/
-│       └── test_chroma       # Base de datos chroma
-│   └── database/
-│       └── db.py             # Conexión a base de datos
-│   └── models/
+- rsm_test/
+- ├── code/
+- │   └── data/
+- │       └── test_chroma       # Base de datos chroma
+- │   └── database/
+- │       └── db.py             # Conexión a base de datos
+- │   └── models/
 │       └── agents/
 │       └── nodes_ingest/
 │       └── nodes_query/
@@ -68,9 +68,9 @@ rsm_test/
 
 ## 📡 Endpoints REST
 
-GET	      /health	    Verifica estado del servicio
-POST	    /ingest	    Creación de base de datos e Ingesta de documentos web
-POST	    /query	    Consulta a LLM con RAG, enviar pregunta en JSON: { "question": "..." }
+- GET	      /health	    Verifica estado del servicio
+- POST	    /ingest	    Creación de base de datos e Ingesta de documentos web
+- POST	    /query	    Consulta a LLM con RAG, enviar pregunta en JSON: { "question": "..." }
 
 
 
@@ -147,10 +147,6 @@ docker compose -f docker-compose.yaml down
 
 > **Nota:** Para probar el funcionamiento de ingest se debe cambiar el valor de `CHROMA_DB=nuevo_nombre` en el archivo de entorno.
 
-### 7. Ejecución en local
-```sh
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
 
 
 ## 📌 Justificación Técnica
