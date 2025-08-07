@@ -13,7 +13,7 @@ def retrieve_query_node(question, state):
     if not question:
         raise ValueError("No question provided")
 
-    connection  = get_connection()
+    connection  = get_connection("")
     collections = get_collection(connection)
 
     results = collections.query(

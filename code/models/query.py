@@ -5,7 +5,8 @@ from config import config
 
 config_env = config['default']
 
-
+import utils.time as tiempo
+@tiempo.time_execution
 class Query():
     @classmethod
     def get_question_answer(self, question, matching_count):
@@ -13,7 +14,7 @@ class Query():
             if not question:
                 raise ValueError("No question provided")
     
-            connection  = get_connection()
+            connection  = get_connection("")
             collections = get_collection(connection)
 
             state = {"query": question}

@@ -14,13 +14,15 @@ config_env = config['default']
 
 from chromadb import Collection
 
+import utils.time as tiempo
+
+# @tiempo.time_execution
 class Ingestion():    
     @classmethod
     def add_ingest_urls(self):
     # try:
-        CrearArchivoLog()
 
-        logger = logging.getLogger('test_rsm')
+        logger = logging.getLogger('/ingest')
 
         urls = [config_env.URL_1, config_env.URL_2]
 
@@ -33,6 +35,7 @@ class Ingestion():
         # urls = ["https://www.google.com/"]
 
         if not urls:
+            logger = logging.getLogger('error')
             logger.error('No URLs provided for ingestion. (add_ingest_urls)')
             raise ValueError("No URLs provided for ingestion. (add_ingest_urls)")
 
@@ -40,7 +43,7 @@ class Ingestion():
 
             logger.info(f"Iniciando creación de base de datos {config_env.CHROMA_DB}")
             start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text="Conectando al servidor...", seed=datetime_now, output_text={"docs":urls})
-            connection  = get_connection()
+            connection  = get_connection(urls)
             start_trace(user_id="crar", name=f"Creación de base de datos {config_env.CHROMA_DB}", input_text="Creando base de datos...", seed=datetime_now, output_text={"docs":urls})
 
 
@@ -77,6 +80,7 @@ class Ingestion():
             logger.info(f"Creación de base de datos {config_env.CHROMA_DB} terminada con éxito")
 
         except ValueError as ex:
+            logger = logging.getLogger('error')
             logger.error(f"Error en la creación de base de datos {config_env.CHROMA_DB} - {ex.args}")
         
 

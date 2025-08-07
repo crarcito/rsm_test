@@ -1,12 +1,11 @@
-import openai
 from langchain_openai import OpenAIEmbeddings
 
 from config import config
-from typing import List
-import numpy as np
-
 config_env = config['default']
 
+import utils.time as tiempo
+
+@tiempo.time_execution
 def embed_node(state):
     content = state["content"]
 

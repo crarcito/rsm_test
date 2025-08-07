@@ -1,11 +1,7 @@
-import json
 from config import config
 
 from chromadb import Collection
 from langchain_openai import OpenAIEmbeddings
-# from langchain.embeddings import OpenAIEmbeddings
-
-# from sentence_transformers import CrossEncoder
 
 config_env = config['default']
 

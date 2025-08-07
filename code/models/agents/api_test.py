@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from utils.observability import start_trace, log_span, log_error, CrearArchivoLog
+from utils.observability import start_trace
 from datetime import datetime
 # # from ..schemas import QueryRequest
 from models.query import Query
@@ -35,7 +35,7 @@ import logging
 
 @api_router.post("/query")
 async def query(question: str):
-    CrearArchivoLog()
+    # CrearArchivoLog()
     logger = logging.getLogger("test_rsm")
 
     datetime_now = str(datetime.now())

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test RSM RAG Web</title>
+    <style>
+        body { font-family: sans-serif; padding: 2em; max-width: 600px; margin: auto; }
+        textarea, input[type="submit"] { width: 100%; margin-top: 1em; }
+    </style>
+</head>
+<body>
+    <h1>🤖 Test RSM RAG Web</h1>
+    <form method="POST">
+        <label for="question">Pregunta:</label>
+        <textarea name="question" rows="3" placeholder="Escribe tu pregunta aquí...">qué es PEP?</textarea>
+        <input type="submit" value="Enviar">
+    </form>
+
+    {% if response %}
+        <h2>Respuesta de tu pregunta:</h2>
+
+        <div style="bottom: 20px;
+                        right: 20px;
+                        background-color:bisque;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                        color:darkblue; padding: 20px 20px 20px 20px;
+                        z-index: 1000; text-align:justify;">
+            <p style="text-decoration: underline; font-weight:bold;">{{ question_asked }}</p>
+            <p>{{ response }}</p>
+
+        </div>
+        
+    {% endif %}
+</body> 
+</html>

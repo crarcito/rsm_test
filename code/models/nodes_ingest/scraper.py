@@ -3,11 +3,9 @@ import requests
 from datetime import datetime
 from bs4 import BeautifulSoup
 
-from utils.observability import start_trace, log_span, log_error
+import utils.time as tiempo
 
-import utils.time as tiempo, logging as logger
-
-@tiempo.time_execution 
+@tiempo.time_execution
 def scrape_node(state):
     """ This function fetches the HTML content of the given URL and extracts text from it.
     It updates the state with the scraped text."""
@@ -17,7 +15,6 @@ def scrape_node(state):
     # Ensure the state has a URL to scrape
     urls = state["url"]
 
-    # logger.info(time_execution)
     # try:
     #     docs = [WebBaseLoader(url).load() for url in urls]
     #     doc_list = [item for sublist in docs for item in sublist]

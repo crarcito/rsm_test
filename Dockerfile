@@ -1,14 +1,15 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 # FROM python:3.12.5-alpine
 
 WORKDIR /app
 
-COPY code /app
+COPY code /app/code
 
 # RUN apk add --no-cache gcc musl-dev linux-headers
 
 COPY .env  .env
 
+ENV USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 
 COPY requirements.txt  requirements.txt
 
@@ -21,10 +22,7 @@ RUN pip3 install transformers --no-deps \
 
 RUN python -c "from sentence_transformers import SentenceTransformer; model = SentenceTransformer('sdadas/mmlw-retrieval-roberta-large')"
 
-#EXPOSE the port where app will be running
-EXPOSE 8080
+CMD ["python", "code/test.py"]
 
-#Command to run the app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-# CMD ["python", "app.py"]
-
+# Run uvicorn server when the container launches
+# CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "80"]

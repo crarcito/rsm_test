@@ -37,6 +37,7 @@ class Config:
     LANGFUSE_PUBLIC_KEY = config('LANGFUSE_PUBLIC_KEY')
     LANGFUSE_HOST = config('LANGFUSE_HOST')
     
+    USER_AGENT= config('USER_AGENT')
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -75,6 +76,8 @@ class DevelopmentConfig(Config):
     LANGFUSE_SECRET_KEY = config('LANGFUSE_SECRET_KEY') 
     LANGFUSE_PUBLIC_KEY = config('LANGFUSE_PUBLIC_KEY')
     LANGFUSE_HOST = config('LANGFUSE_HOST')
+
+    USER_AGENT= config('USER_AGENT')
 
 
 class ProductionConfig(Config):
@@ -115,6 +118,8 @@ class ProductionConfig(Config):
     LANGFUSE_SECRET_KEY = config('LANGFUSE_SECRET_KEY') 
     LANGFUSE_PUBLIC_KEY = config('LANGFUSE_PUBLIC_KEY')
     LANGFUSE_HOST = config('LANGFUSE_HOST')
+
+    USER_AGENT= config('USER_AGENT')
 
 config = {
     'development': DevelopmentConfig,

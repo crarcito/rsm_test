@@ -1,5 +1,3 @@
-from typing import List
-
 from sentence_transformers import CrossEncoder
 
 reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')

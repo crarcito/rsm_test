@@ -1,9 +1,5 @@
-from typing import List, TypedDict
-from langfuse._client.observe import observe
 from langfuse._client.get_client import get_client
-from langfuse._client.client import Langfuse, _AgnosticContextManager
-
-from langchain.callbacks import  LangChainTracer
+from langfuse._client.client import Langfuse
 
 import logging
 import os
@@ -53,11 +49,13 @@ def log_error(trace, error_message: str):
         output={"error": error_message},
     )
 
+from datetime import datetime
 
 def CrearArchivoLog():
     # Define la ruta del archivo de registro
     log_dir = os.path.join(os.getcwd(), 'logs')  # Crea un directorio 'logs' en el directorio actual
-    log_file = os.path.join(log_dir, 'test_rsm.log')
+
+    log_file = os.path.join(log_dir, f"log_test_rsm{format(datetime.strftime(datetime.today(), '%d_%m_%Y'))}.log")
 
     # Crea el directorio si no existe
     if not os.path.exists(log_dir):
@@ -69,13 +67,29 @@ def CrearArchivoLog():
     handler.setFormatter(formatter)
 
     # Añade el manejador al logger
+    logger = logging.getLogger('/ingest')
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+
+    # Añade el manejador al logger
+    logger = logging.getLogger('/query')
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+
+    logger = logging.getLogger('error')
+    logger.addHandler(handler) 
+    logger.setLevel(logging.DEBUG)
+
+        # Añade el manejador al logger
     logger = logging.getLogger('test_rsm')
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
 
+
     # Ahora puedes usar el logger para registrar mensajes
-    logger.debug('Este es un mensaje de depuración')
-    logger.info('Este es un mensaje informativo')
-    logger.warning('Este es un mensaje de advertencia')
-    logger.error('Este es un mensaje de error')
-    logger.critical('Este es un mensaje crítico')
+    # logger.debug('Este es un mensaje de depuración')
+    logger.info('[COMIENZO DE NUEVOS REGISTROS]')
+
+    # logger.warning('Este es un mensaje de advertencia')
+    # logger.error('Este es un mensaje de error')
+    # logger.critical('Este es un mensaje crítico')

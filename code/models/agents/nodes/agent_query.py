@@ -9,9 +9,9 @@ from models.agents.nodes.node_rerank import rerank_query_node
 from models.agents.nodes.node_generate_answer import generate_answer_query_node
 from models.agents.nodes.node_output import output_query_node
 
-from utils.observability import start_trace, log_span, log_error, CrearArchivoLog
+from utils.observability import start_trace
+import utils.time as tiempo
 from datetime import datetime
-import logging
 
 
 # Define state
@@ -31,7 +31,7 @@ class RAGState(TypedDict):
     answer_final: dict
 
 
-
+import logging
 # **********************************************************************************
 # Nodes for the RAG query graph
 # **********************************************************************************
@@ -39,7 +39,12 @@ BEGIN = True
 if BEGIN:
     datetime_now = str(datetime.now())
     # Auth Node # Verifica JWT y extrae user_id
+
+    @tiempo.time_execution
     def auth_node(state: RAGState) -> RAGState:
+        
+        logger = logging.getLogger('/query')
+        logger.info(f'buscando respuesta a pregunta -> {state["query"]}')
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo verificación Token de acceso", seed=datetime_now, output_text={"proc":"token"})
 
         state["token"] = "Token OK"
@@ -49,8 +54,10 @@ if BEGIN:
         return state
 
     # Embedding Node
+    @tiempo.time_execution
     def embed_node(state: RAGState) -> RAGState:
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Embedding Query ", seed=datetime_now, output_text={"node": "embed_node", "output": state["query"]})
+
 
         state["embedding"] = embedding_query_node(state["query"])
 
@@ -58,6 +65,7 @@ if BEGIN:
         return state
 
     # Retrieval Node
+    @tiempo.time_execution
     def retrieve_node(state: RAGState) -> RAGState:
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Retrieve Query ", seed=datetime_now, output_text={"node": "retrieve_node", "output": state["query"]})
 
@@ -68,6 +76,7 @@ if BEGIN:
 
     
     # Rerank Node
+    @tiempo.time_execution
     def rerank_node(state: RAGState) -> RAGState:
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Rerank Query ", seed=datetime_now, output_text={"node": "rerank_node", "output": state["query"]})
 
@@ -77,6 +86,7 @@ if BEGIN:
         return state
 
     # Generation Node
+    @tiempo.time_execution
     def generateRAG_node(state: RAGState) -> RAGState:
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo generateRAG Query ", seed=datetime_now, output_text={"node": "generateRAG_node", "output": state["query"]})
 
@@ -91,13 +101,17 @@ if BEGIN:
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo generateRAG Query ", seed=datetime_now, output_text={"node": "generateRAG_node", "output": state["response_RAG"]})
         return state
     
-
+    @tiempo.time_execution
     def output_node(state: RAGState):
+        
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Output Query ", seed=datetime_now, output_text={"node": "output_node", "output": state["query"]})
 
         state["answer_final"] = output_query_node(state["response_RAG"], state["reranked_docs"])
 
         start_trace(user_id="crar", name="Interacción con el agente", input_text="Nodo Output Query ", seed=datetime_now, output_text={"node": "output_node", "output": state["answer_final"]})
+
+        logger = logging.getLogger('/query')
+        logger.info(f'entrega de respuesta a pregunta -> {state["query"]}')
         return state
     
     # def response_node(state: RAGState):

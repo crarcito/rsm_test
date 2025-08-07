@@ -1,8 +1,6 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from datetime import datetime
-from utils.observability import start_trace, log_span, log_error
-import utils.time as tiempo, logging as logger
+import utils.time as tiempo
 
 @tiempo.time_execution
 def chunk_text(state, chunk_size=512):
@@ -10,8 +8,6 @@ def chunk_text(state, chunk_size=512):
 
     #     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     #     chunks = splitter.split_documents(docs)
-
-    logger.info(f"start chunk_state sin decorador")
 
     text = state["text"]
     if not text:
